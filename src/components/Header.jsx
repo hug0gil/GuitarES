@@ -1,40 +1,46 @@
-import { useMemo } from "react";
+import { useMemo } from "react"
 
-export default function Header({ cart, removeFromCart }) {
+export default function Header({
+  cart,
+  removeFromCart,
+  incrementQuantity,
+  decrementQuantity,
+  clearCart
+}) {
   // useMemo memoriza el resultado de la función, solo vuelve a calcular el valor si cart cambia.
   // no hace falta llamar a parentesis para que funcione pq ya no es un método
-  const isEmpty = useMemo(() => cart.length === 0, [cart]);
-  const carTotal = () =>
-    cart.reduce((total, item) => total + item.quantity * item.price, 0);
+  const isEmpty = useMemo(() => cart.length === 0, [cart])
+  const cartTotal = () =>
+    cart.reduce((total, item) => total + item.quantity * item.price, 0)
 
   return (
     <>
-      <header className="py-5 header">
-        <div className="container-xl">
-          <div className="row justify-content-center justify-content-md-between">
-            <div className="col-8 col-md-3">
-              <a href="index.html">
+      <header className='py-5 header'>
+        <div className='container-xl'>
+          <div className='row justify-content-center justify-content-md-between'>
+            <div className='col-8 col-md-3'>
+              <a href='index.html'>
                 <img
-                  className="img-fluid"
-                  src="./public/img/logo.svg"
-                  alt="imagen logo"
+                  className='img-fluid'
+                  src='img/logo.svg'
+                  alt='imagen logo'
                 />
               </a>
             </div>
-            <nav className="col-md-6 a mt-5 d-flex align-items-start justify-content-end">
-              <div className="carrito">
+            <nav className='col-md-6 a mt-5 d-flex align-items-start justify-content-end'>
+              <div className='carrito'>
                 <img
-                  className="img-fluid"
-                  src="./public/img/carrito.png"
-                  alt="imagen carrito"
+                  className='img-fluid'
+                  src='img/carrito.png'
+                  alt='imagen carrito'
                 />
 
-                <div id="carrito" className="bg-white p-3">
+                <div id='carrito' className='bg-white p-3'>
                   {isEmpty ? (
-                    <p className="text-center">El carrito esta vacio</p>
+                    <p className='text-center'>El carrito esta vacio</p>
                   ) : (
                     <>
-                      <table className="w-100 table">
+                      <table className='w-100 table'>
                         <thead>
                           <tr>
                             <th>Imagen</th>
@@ -49,26 +55,34 @@ export default function Header({ cart, removeFromCart }) {
                             <tr key={guitar.id}>
                               <td>
                                 <img
-                                  className="img-fluid"
-                                  src={`./public/img/${guitar.image}.jpg`}
-                                  alt="imagen guitarra"
+                                  className='img-fluid'
+                                  src={`img/${guitar.image}.jpg`}
+                                  alt='imagen guitarra'
                                 />
                               </td>
                               <td>{guitar.name}</td>
-                              <td className="fw-bold">${guitar.price}</td>
-                              <td className="flex align-items-start gap-4">
-                                <button type="button" className="btn btn-dark">
+                              <td className='fw-bold'>{guitar.price} €</td>
+                              <td className='flex align-items-start gap-4'>
+                                <button
+                                  type='button'
+                                  className='btn btn-dark'
+                                  onClick={() => decrementQuantity(guitar.id)}
+                                >
                                   -
                                 </button>
                                 {guitar.quantity}
-                                <button type="button" className="btn btn-dark">
+                                <button
+                                  type='button'
+                                  className='btn btn-dark'
+                                  onClick={() => incrementQuantity(guitar.id)}
+                                >
                                   +
                                 </button>
                               </td>
                               <td>
                                 <button
-                                  className="btn btn-danger"
-                                  type="button"
+                                  className='btn btn-danger'
+                                  type='button'
                                   onClick={() => removeFromCart(guitar.id)}
                                 >
                                   X
@@ -79,13 +93,13 @@ export default function Header({ cart, removeFromCart }) {
                         </tbody>
                       </table>
 
-                      <p className="text-end">
+                      <p className='text-end'>
                         Total pagar:{" "}
-                        <span className="fw-bold">${carTotal()}</span>
+                        <span className='fw-bold'>{cartTotal()} €</span>
                       </p>
                     </>
                   )}
-                  <button className="btn btn-dark w-100 mt-3 p-2">
+                  <button className='btn btn-dark w-100 mt-3 p-2' onClick={clearCart}>
                     Vaciar Carrito
                   </button>
                 </div>
@@ -95,5 +109,5 @@ export default function Header({ cart, removeFromCart }) {
         </div>
       </header>
     </>
-  );
+  )
 }

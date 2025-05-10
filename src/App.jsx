@@ -1,12 +1,25 @@
 /* eslint-disable no-unused-vars */
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Guitar from "./components/Guitar"
 import Header from "./components/Header"
 import { db } from "./data/db"
 
 function App() {
-  const [data, setData] = useState(db)
-  const [cart, setCart] = useState([])
+
+  const initialCart = () =>{
+    const localStorageCart = localStorage.getItem('cart')
+    return localStorageCart ? JSON.parse(localStorageCart) : []
+  }
+
+  const [data] = useState(db)
+  const [cart, setCart] = useState(initialCart)
+
+  const MAX_ITEMS = 5
+  const MIN_ITEMS = 1
+
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart))
+  }, [cart])
 
   /* Esto para APIs, para consumir cuando este listo el componente
   useEffect(() => {
@@ -36,9 +49,47 @@ function App() {
     setCart((prevCart) => prevCart.filter((guitar) => guitar.id !== id))
   }
 
+  function incrementQuantity(id) {
+    console.log("Incrementa")
+    const updatedCart = cart.map((item) => {
+      if (item.id === id && item.quantity < MAX_ITEMS) {
+        return {
+          ...item,
+          quantity: item.quantity + 1,
+        }
+      }
+      return item
+    })
+    setCart(updatedCart)
+  }
+
+  function decrementQuantity(id) {
+    console.log("Decrementa")
+    const updatedCart = cart.map((item) => {
+      if (item.id === id && item.quantity > MIN_ITEMS) {
+        return {
+          ...item,
+          quantity: item.quantity - 1,
+        }
+      }
+      return item
+    })
+    setCart(updatedCart)
+  }
+
+  function clearCart() {
+    setCart([])
+  }
+
   return (
     <>
-      <Header cart={cart} removeFromCart={removeFromCart} />
+      <Header
+        cart={cart}
+        removeFromCart={removeFromCart}
+        incrementQuantity={incrementQuantity}
+        decrementQuantity={decrementQuantity}
+        clearCart={clearCart}
+      />
 
       <main className='container-xl mt-5'>
         <h2 className='text-center'>Nuestra Colección</h2>

@@ -16,7 +16,7 @@ export default function Guitar({ guitar, addToCart }) {
           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sit quae
           labore odit magnam in autem nesciunt, amet deserunt
         </p>
-        <p className="fw-black text-primary fs-3">${guitar.price}</p>
+        <p className="fw-black text-primary fs-3">{guitar.price} €</p>
         <button
           type="button"
           className="btn btn-dark w-100"
